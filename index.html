@@ -367,140 +367,9 @@
 
 
       <div class="books" id="book-list">
-
-
-        <!-- TRUYỆN 1 -->
-
-        <div
-          class="book"
-          data-category="Tiên hiệp"
-          data-title="Phàm Nhân Tu Tiên"
-        >
-
-          <div class="cover">
-            ⚔️<br>
-            PHÀM NHÂN<br>
-            TU TIÊN
-          </div>
-
-          <div class="book-info">
-
-            <div class="book-title">
-              Phàm Nhân Tu Tiên
-            </div>
-
-            <div class="author">
-              Tác giả: Tiểu Ngư
-            </div>
-
-            <div class="chapters">
-              📖 128 chương
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- TRUYỆN 2 -->
-
-        <div
-          class="book"
-          data-category="Tu tiên"
-          data-title="Con Đường Tu Tiên"
-        >
-
-          <div class="cover blue">
-            🗡️<br>
-            CON ĐƯỜNG<br>
-            TU TIÊN
-          </div>
-
-          <div class="book-info">
-
-            <div class="book-title">
-              Con Đường Tu Tiên
-            </div>
-
-            <div class="author">
-              Tác giả: Vô Danh
-            </div>
-
-            <div class="chapters">
-              📖 86 chương
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- TRUYỆN 3 -->
-
-        <div
-          class="book"
-          data-category="Huyền huyễn"
-          data-title="Thiên Đạo Chiến Thần"
-        >
-
-          <div class="cover purple">
-            🌌<br>
-            THIÊN ĐẠO<br>
-            CHIẾN THẦN
-          </div>
-
-          <div class="book-info">
-
-            <div class="book-title">
-              Thiên Đạo Chiến Thần
-            </div>
-
-            <div class="author">
-              Tác giả: Mộng Thiên
-            </div>
-
-            <div class="chapters">
-              📖 215 chương
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- TRUYỆN 4 -->
-
-        <div
-          class="book"
-          data-category="Đô thị"
-          data-title="Đô Thị Tu Tiên"
-        >
-
-          <div class="cover green">
-            🏙️<br>
-            ĐÔ THỊ<br>
-            TU TIÊN
-          </div>
-
-          <div class="book-info">
-
-            <div class="book-title">
-              Đô Thị Tu Tiên
-            </div>
-
-            <div class="author">
-              Tác giả: Thanh Phong
-            </div>
-
-            <div class="chapters">
-              📖 342 chương
-            </div>
-
-          </div>
-
-        </div>
-
-
+<div style="padding:30px;text-align:center;color:#f5c451;">
+        ⏳ Đang tải truyện...
+    </div>
       </div>
 
     </section>
@@ -517,129 +386,201 @@
     Website đang trong quá trình xây dựng.
 
   </footer>
-
-
-  <script>
-
-    const searchInput = document.getElementById("search");
-
-    const books = document.querySelectorAll(".book");
-
-
-    searchInput.addEventListener("input", function () {
-
-      const keyword = this.value.toLowerCase();
-
-      books.forEach(function (book) {
-
-        const title =
-          book.dataset.title.toLowerCase();
-
-        const category =
-          book.dataset.category.toLowerCase();
-
-        if (
-          title.includes(keyword) ||
-          category.includes(keyword)
-        ) {
-
-          book.style.display = "";
-
-        } else {
-
-          book.style.display = "none";
-
-        }
-
-      });
-
-    });
-
-
-    function filterBooks(category) {
-
-      document
-        .querySelectorAll(".category")
-        .forEach(function (button) {
-
-          button.classList.remove("active");
-
-        });
-
-
-      event.target.classList.add("active");
-
-
-      books.forEach(function (book) {
-
-        if (
-          category === "all" ||
-          book.dataset.category === category
-        ) {
-
-          book.style.display = "";
-
-        } else {
-
-          book.style.display = "none";
-
-        }
-
-      });
-
-    }
-
-  </script>
-<!-- SUPABASE CONNECTION TEST -->
+  <!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-    const SUPABASE_URL = "https://zpibmlocamawawwdhnci.supabase.co";
+const SUPABASE_URL = "https://zpibmlocamawawwdhnci.supabase.co";
 
-    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vDwOg58cEIBTTTiHp3ypHA_oW0QXmqB";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vDwOg58cEIBTTTiHp3ypHA_oW0QXmqB";
 
-    const supabaseClient = supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-    );
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
 
-    async function testSupabaseConnection() {
-        const { data, error } = await supabaseClient
-            .from("novels")
-            .select("id, title, slug, description, status")
-            .limit(5);
 
-        if (error) {
-            console.error("❌ Supabase connection error:", error);
+// ===============================
+// TẢI TRUYỆN TỪ SUPABASE
+// ===============================
 
-            const message = document.createElement("div");
-            message.style.cssText =
-                "position:fixed;bottom:20px;right:20px;z-index:99999;" +
-                "background:#7f1d1d;color:white;padding:14px 20px;" +
-                "border-radius:10px;font-family:Arial;font-size:14px;";
+async function loadNovels() {
 
-            message.textContent = "❌ Chưa kết nối được Supabase";
-            document.body.appendChild(message);
+    const bookList = document.getElementById("book-list");
 
-            return;
-        }
+    bookList.innerHTML = `
+        <div style="
+            grid-column:1/-1;
+            text-align:center;
+            padding:40px;
+            color:#f5c451;
+        ">
+            ⏳ Đang tải truyện...
+        </div>
+    `;
 
-        console.log("✅ SUPABASE CONNECTED!");
-        console.log("📚 Novels:", data);
 
-        const message = document.createElement("div");
-        message.style.cssText =
-            "position:fixed;bottom:20px;right:20px;z-index:99999;" +
-            "background:#14532d;color:white;padding:14px 20px;" +
-            "border-radius:10px;font-family:Arial;font-size:14px;";
+    const { data, error } = await supabaseClient
+        .from("novels")
+        .select(`
+            id,
+            title,
+            slug,
+            description,
+            status
+        `)
+        .order("created_at", { ascending: false });
 
-        message.textContent =
-            "✅ Supabase đã kết nối — tìm thấy " + data.length + " truyện";
 
-        document.body.appendChild(message);
+    if (error) {
+
+        console.error("Supabase error:", error);
+
+        bookList.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:40px;
+                color:#ff6b6b;
+            ">
+                ❌ Không thể tải danh sách truyện.
+                <br>
+                <small>${error.message}</small>
+            </div>
+        `;
+
+        return;
     }
 
-    testSupabaseConnection();
+
+    if (!data || data.length === 0) {
+
+        bookList.innerHTML = `
+            <div style="
+                grid-column:1/-1;
+                text-align:center;
+                padding:40px;
+                color:#aaa;
+            ">
+                📚 Chưa có truyện nào.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    bookList.innerHTML = "";
+
+
+    data.forEach(function(novel, index) {
+
+        const colors = ["", "blue", "purple", "green"];
+        const color = colors[index % colors.length];
+
+        const book = document.createElement("div");
+
+        book.className = "book";
+
+        book.dataset.title = novel.title || "";
+        book.dataset.description = novel.description || "";
+        book.dataset.category = "";
+
+        book.innerHTML = `
+            <div class="cover ${color}">
+                📖<br>
+                ${escapeHtml(novel.title)}
+            </div>
+
+            <div class="book-info">
+
+                <div class="book-title">
+                    ${escapeHtml(novel.title)}
+                </div>
+
+                <div class="author">
+                    📚 Truyện đang được cập nhật
+                </div>
+
+                <div class="chapters">
+                    📖 ${novel.status || "Đang ra"}
+                </div>
+
+            </div>
+        `;
+
+        book.addEventListener("click", function() {
+            window.location.href = "#";
+        });
+
+        bookList.appendChild(book);
+    });
+
+
+    setupSearch();
+}
+
+
+// ===============================
+// TÌM KIẾM
+// ===============================
+
+function setupSearch() {
+
+    const searchInput = document.getElementById("search");
+
+    searchInput.addEventListener("input", function() {
+
+        const keyword = this.value
+            .toLowerCase()
+            .trim();
+
+        const books = document.querySelectorAll(".book");
+
+        books.forEach(function(book) {
+
+            const title =
+                (book.dataset.title || "").toLowerCase();
+
+            const description =
+                (book.dataset.description || "").toLowerCase();
+
+            if (
+                title.includes(keyword) ||
+                description.includes(keyword)
+            ) {
+                book.style.display = "";
+            } else {
+                book.style.display = "none";
+            }
+
+        });
+
+    });
+
+}
+
+
+// ===============================
+// ESCAPE HTML
+// ===============================
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text || "";
+
+    return div.innerHTML;
+}
+
+
+// ===============================
+// CHẠY WEBSITE
+// ===============================
+
+loadNovels();
+
 </script>
 </body>
 </html>
