@@ -590,6 +590,56 @@
     }
 
   </script>
+<!-- SUPABASE CONNECTION TEST -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script>
+    const SUPABASE_URL = "https://zpibmlocamawawwdhnci.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_vDwOg58cEIBTTTiHp3ypHA_oW0QXmqB";
+
+    const supabaseClient = supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+    async function testSupabaseConnection() {
+        const { data, error } = await supabaseClient
+            .from("novels")
+            .select("id, title, slug, description, status")
+            .limit(5);
+
+        if (error) {
+            console.error("❌ Supabase connection error:", error);
+
+            const message = document.createElement("div");
+            message.style.cssText =
+                "position:fixed;bottom:20px;right:20px;z-index:99999;" +
+                "background:#7f1d1d;color:white;padding:14px 20px;" +
+                "border-radius:10px;font-family:Arial;font-size:14px;";
+
+            message.textContent = "❌ Chưa kết nối được Supabase";
+            document.body.appendChild(message);
+
+            return;
+        }
+
+        console.log("✅ SUPABASE CONNECTED!");
+        console.log("📚 Novels:", data);
+
+        const message = document.createElement("div");
+        message.style.cssText =
+            "position:fixed;bottom:20px;right:20px;z-index:99999;" +
+            "background:#14532d;color:white;padding:14px 20px;" +
+            "border-radius:10px;font-family:Arial;font-size:14px;";
+
+        message.textContent =
+            "✅ Supabase đã kết nối — tìm thấy " + data.length + " truyện";
+
+        document.body.appendChild(message);
+    }
+
+    testSupabaseConnection();
+</script>
 </body>
 </html>
